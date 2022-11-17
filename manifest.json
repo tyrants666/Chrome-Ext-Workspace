@@ -1,0 +1,19 @@
+{
+    "manifest_version": 3,
+    "name": "Chrome Workspace",
+    "version": "0.0.1",
+    "description": "Intuitive way to show chrome bookmarks",
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": {                
+        "28": "icons/logo.png"
+      }
+    },
+    "host_permissions": [
+      "https://developer.chrome.com/*"
+    ],
+    "permissions": [
+      "tabs",
+      "tabGroups"
+    ]
+}
