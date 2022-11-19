@@ -7,6 +7,15 @@
     <link rel="stylesheet" href="./popup.css" />
   </head>
   <body>
+
+    <template id="ws_template">
+      <div class="ws">
+        <a>
+          <h3 class="ws-name"></h3>
+        </a>
+      </div>
+    </template>
+
     <template id="li_template">
       <li>
         <a>
@@ -17,8 +26,11 @@
     </template>
 
     <h1>My Workspaces</h1>
-    <input placeholder="Enter workspace name" name="workspace-name" id="workspace-name" type="text">
+    <input id="workspace-name" placeholder="Enter workspace name" name="workspace-name" type="text">
     <button>Group Tabs</button>
+    <hr>
+    <div class="workspaces"></div>
+    <hr>
     <ul></ul>
 
     <script src="./popup.js" type="module"></script>
