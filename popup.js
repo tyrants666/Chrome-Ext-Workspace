@@ -1,5 +1,5 @@
 
-
+let wsId = 0;
 const tabs = await chrome.tabs.query({ currentWindow:true });
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Collator
 const collator = new Intl.Collator();
@@ -36,59 +36,109 @@ button.addEventListener("click", async () => {
 
   //Save Workkspace
   let wsObj = new workspaceClass()
-  wsObj.save_workspace();
+  wsObj.workspace_save();
 
 });
 
-// CLASS WOKSPACE -------------------------
+
+// CLASS WOKSPACE -----------------------------------------------------------------
 class workspaceClass {
+
   constructor(){
     this.wsName = document.querySelector('#workspace-name').value;
   }
 
-  save_workspace(){
+  //Save -------------------------------------
+  workspace_save(){
     if(this.wsName){
       let workspaces = new Object();
-      workspaces.workspace_name = this.wsName;
-      workspaces.workspace_color = 'red';
-      workspaces.urls = {}
+      workspaces[wsId] = {}
+      workspaces[wsId].workspace_name = this.wsName;
+      workspaces[wsId].workspace_color = 'red';
+      workspaces[wsId].urls = {}
+      workspaces[wsId].windowId = {}
       for (const i in tabs) {
-        workspaces.urls[i] = {
+        workspaces[wsId].urls[i] = {
           title:tabs[i].title,
           icon:tabs[i].favIconUrl,
-          url:tabs[i].url
+          url:tabs[i].url,
+          windowId:tabs[i].windowId++,
+          groupId:tabs[i].groupId
         }
       }
-      this.create_workspace_elem();
+      workspaces[wsId].windowId = workspaces[wsId].urls[0].windowId;
+      this.workspace_create_elem_(wsId);
       console.log(workspaces);
+
+      localStorage.setItem('Workspaces', JSON.stringify(workspaces));
+      wsId++
     }
   }
 
-  create_workspace_elem() {
+  //Create Workspace Elem ---------------------------------------------------
+  workspace_create_elem_(ws_id) {
     const wsWrapper = document.querySelector('.workspaces');
     const wsTemplate = document.querySelector('#ws_template');
     // const elements = new Set();
     const ws = wsTemplate.content.firstElementChild.cloneNode(true)
+    ws.setAttribute('data-window-id', ws_id);
     ws.querySelector('.ws-name').textContent = this.wsName;
     // elements.add(element);
     wsWrapper.append(ws)
+    this.workspace_onclick();
   }
 
+  //Workspace onclick ---------------------------------------------
+  workspace_onclick(){
+    let all_ws = document.querySelectorAll('.ws')
+    for (const ws of all_ws) {
+      ws.onclick = e => {
+        let window_id = ws.getAttribute('data-window-id') 
+        alert(window_id)
+      }
+    }
+  }
 }
 
+
+
+
+
+
+
+
+
 // workspaces = {
-//   workspace_name: "HP Tester",
-//   workspace_color: "Red",
-//   urls:{
-//     0:{
-//       icon:"",
-//       name:"demo9",
-//       url:"https://demo9.staging.com/"
-//     },
-//     1:{
-//       icon:"",
-//       name:"demo9",
-//       url:"https://demo9.staging.com/"
+//   4424: {
+//     workspace_name: "HP Tester",
+//     workspace_color: "Red",
+//     urls:{
+//       0:{
+//         icon:"",
+//         name:"demo9",
+//         url:"https://demo9.staging.com/"
+//       },
+//       1:{
+//         icon:"",
+//         name:"demo9",
+//         url:"https://demo9.staging.com/"
+//       }
 //     }
-//   }
+//   },
+//   4424: {
+//     workspace_name: "HP Tester",
+//     workspace_color: "Red",
+//     urls:{
+//       0:{
+//         icon:"",
+//         name:"demo9",
+//         url:"https://demo9.staging.com/"
+//       },
+//       1:{
+//         icon:"",
+//         name:"demo9",
+//         url:"https://demo9.staging.com/"
+//       }
+//     }
+//   },
 // }

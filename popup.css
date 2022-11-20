@@ -27,3 +27,8 @@ h3,
 p {
   margin: 0;
 }
+
+.ws{
+  cursor: default;
+  margin-bottom: 5px;
+}
