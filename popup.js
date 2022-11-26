@@ -1,3 +1,72 @@
+// CLASS WOKSPACE -----------------------------------------------------------------
+class workspaceClass {
+  constructor(){
+    this.wsName = document.querySelector('#workspace-name').value;
+  }
+  //Save -------------------------------------
+  workspace_save(){
+    if(this.wsName){
+
+      let lastWsItemId = Object.keys(wsItem).pop();
+      if (lastWsItemId !== undefined) {
+        wsId <= lastWsItemId ? wsId = +lastWsItemId+1 : '';
+      }else{ wsId = 0; }
+
+      workspaces[wsId] = {}
+      workspaces[wsId].workspace_name = this.wsName;
+      workspaces[wsId].workspace_color = 'red';
+      workspaces[wsId].urls = {}
+      workspaces[wsId].windowId = {}
+      for (const i in tabs) {
+        workspaces[wsId].urls[i] = {
+          title:tabs[i].title,
+          icon:tabs[i].favIconUrl,
+          url:tabs[i].url,
+          windowId:tabs[i].windowId++,
+          groupId:tabs[i].groupId
+        }
+      }
+      workspaces[wsId].windowId = workspaces[wsId].urls[0].windowId;
+
+      localStorage_set()
+      wsId++
+    }
+  }
+
+  //Create Workspace Elem ---------------------------------------------------
+  workspace_create_elem_(ws_id, ws_name) {
+    const wsWrapper = document.querySelector('.workspaces');
+    const wsTemplate = document.querySelector('#ws_template');
+    const ws = wsTemplate.content.firstElementChild.cloneNode(true)
+    ws.setAttribute('data-window-id', ws_id);
+    ws.querySelector('.ws-name').textContent = ws_name;
+    wsWrapper.prepend(ws)
+    this.workspace_onclick();
+  }
+
+  //Workspace onclick ---------------------------------------------
+  workspace_onclick(){
+    let all_ws = document.querySelectorAll('.ws')
+    for (const ws of all_ws) {
+      ws.onclick = e => {
+
+        //Create Tabs ---------
+        let window_id = ws.getAttribute('data-window-id');
+        let storedUrls = wsItem[window_id]['urls'];
+        for (const i of Object.keys(storedUrls)) {
+          chrome.tabs.create({ 
+            url: storedUrls[i]['url'] ,
+            active: false
+          });
+        }
+      }
+    }
+  }
+}
+// END CLASS WOKSPACE -----------------------------------------------------------------
+// END CLASS WOKSPACE -----------------------------------------------------------------
+
+
 
 let wsId = 0;
 let workspaces = new Object();
@@ -52,79 +121,11 @@ button.addEventListener("click", async () => {
 
 });
 
-
-// CLASS WOKSPACE -----------------------------------------------------------------
-class workspaceClass {
-  constructor(){
-    this.wsName = document.querySelector('#workspace-name').value;
-  }
-  //Save -------------------------------------
-  workspace_save(){
-    if(this.wsName){
-
-    let lastWsItemId = Object.keys(wsItem).pop();
-    console.log('');
-    if (lastWsItemId !== undefined) {
-      wsId <= lastWsItemId ? wsId = +lastWsItemId+1 : '';
-    }else{
-      wsId = 0;
-    }
-    console.log('wsId : '+ wsId);
-    console.log('');
-    // Object.keys(wsName[Object.keys(wsName).length]);
-
-      workspaces[wsId] = {}
-      workspaces[wsId].workspace_name = this.wsName;
-      workspaces[wsId].workspace_color = 'red';
-      workspaces[wsId].urls = {}
-      workspaces[wsId].windowId = {}
-      for (const i in tabs) {
-        workspaces[wsId].urls[i] = {
-          title:tabs[i].title,
-          icon:tabs[i].favIconUrl,
-          url:tabs[i].url,
-          windowId:tabs[i].windowId++,
-          groupId:tabs[i].groupId
-        }
-      }
-      workspaces[wsId].windowId = workspaces[wsId].urls[0].windowId;
-
-      localStorage_set()
-      wsId++
-    }
-  }
-
-  //Create Workspace Elem ---------------------------------------------------
-  workspace_create_elem_(ws_id) {
-    const wsWrapper = document.querySelector('.workspaces');
-    const wsTemplate = document.querySelector('#ws_template');
-    // const elements = new Set();
-    const ws = wsTemplate.content.firstElementChild.cloneNode(true)
-    ws.setAttribute('data-window-id', ws_id);
-    ws.querySelector('.ws-name').textContent = this.wsName;
-    // elements.add(element);
-    wsWrapper.append(ws)
-    this.workspace_onclick();
-  }
-
-  //Workspace onclick ---------------------------------------------
-  workspace_onclick(){
-    let all_ws = document.querySelectorAll('.ws')
-    for (const ws of all_ws) {
-      ws.onclick = e => {
-        let window_id = ws.getAttribute('data-window-id') 
-        alert(window_id)
-      }
-    }
-  }
-}
-
-
 //Local Storage Functions----------------------------------------------
 //Local Storage Functions----------------------------------------------
 function localStorage_set() {
     localStorage.setItem('workspaces', JSON.stringify(workspaces));
-    wsObj.workspace_create_elem_(wsId);
+    wsObj.workspace_create_elem_(wsId, wsObj.wsName);
 }
 
 function localStorage_get(trigger) {
@@ -132,15 +133,15 @@ function localStorage_get(trigger) {
   if(localStorage['workspaces']){
     wsItem = JSON.parse(localStorage.getItem('workspaces'));
     
-    // if (trigger = 'onload') {
-      
-    // }
-      
-    }
+        if (trigger == 'onload') {
+          window.wsObj = new workspaceClass()
+          for (const key of Object.keys(wsItem)) {
+            wsObj.workspace_create_elem_(key, wsItem[key]['workspace_name'])
+          }
+        }
+
+  }
   workspaces = wsItem;
-  console.log('Workspaces >>>');
-  console.log(wsItem);
-  console.log(workspaces);
 }
 
 
