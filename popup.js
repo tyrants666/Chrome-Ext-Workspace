@@ -1,6 +1,11 @@
 
 let wsId = 0;
+let workspaces = new Object();
+
+localStorage_get('onload')
+
 const tabs = await chrome.tabs.query({ currentWindow:true });
+
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Collator
 const collator = new Intl.Collator();
 tabs.sort((a, b) => collator.compare(a.title, b.title));
@@ -25,7 +30,13 @@ for (const tab of tabs) {
 }
 document.querySelector("ul").append(...elements);
 
-//Add Group Onclick
+
+
+
+
+
+
+//Add Group Onclick --------------------------------------
 const button = document.querySelector("button");
 button.addEventListener("click", async () => {
 
@@ -35,7 +46,8 @@ button.addEventListener("click", async () => {
   await chrome.tabGroups.update(group, { title: "DOCS" });
 
   //Save Workkspace
-  let wsObj = new workspaceClass()
+  localStorage_get()
+  window.wsObj = new workspaceClass()
   wsObj.workspace_save();
 
 });
@@ -43,15 +55,24 @@ button.addEventListener("click", async () => {
 
 // CLASS WOKSPACE -----------------------------------------------------------------
 class workspaceClass {
-
   constructor(){
     this.wsName = document.querySelector('#workspace-name').value;
   }
-
   //Save -------------------------------------
   workspace_save(){
     if(this.wsName){
-      let workspaces = new Object();
+
+    let lastWsItemId = Object.keys(wsItem).pop();
+    console.log('');
+    if (lastWsItemId !== undefined) {
+      wsId <= lastWsItemId ? wsId = +lastWsItemId+1 : '';
+    }else{
+      wsId = 0;
+    }
+    console.log('wsId : '+ wsId);
+    console.log('');
+    // Object.keys(wsName[Object.keys(wsName).length]);
+
       workspaces[wsId] = {}
       workspaces[wsId].workspace_name = this.wsName;
       workspaces[wsId].workspace_color = 'red';
@@ -67,10 +88,8 @@ class workspaceClass {
         }
       }
       workspaces[wsId].windowId = workspaces[wsId].urls[0].windowId;
-      this.workspace_create_elem_(wsId);
-      console.log(workspaces);
 
-      localStorage.setItem('Workspaces', JSON.stringify(workspaces));
+      localStorage_set()
       wsId++
     }
   }
@@ -101,6 +120,28 @@ class workspaceClass {
 }
 
 
+//Local Storage Functions----------------------------------------------
+//Local Storage Functions----------------------------------------------
+function localStorage_set() {
+    localStorage.setItem('workspaces', JSON.stringify(workspaces));
+    wsObj.workspace_create_elem_(wsId);
+}
+
+function localStorage_get(trigger) {
+  window.wsItem = {}
+  if(localStorage['workspaces']){
+    wsItem = JSON.parse(localStorage.getItem('workspaces'));
+    
+    // if (trigger = 'onload') {
+      
+    // }
+      
+    }
+  workspaces = wsItem;
+  console.log('Workspaces >>>');
+  console.log(wsItem);
+  console.log(workspaces);
+}
 
 
 
