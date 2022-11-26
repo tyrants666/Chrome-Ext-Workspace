@@ -31,4 +31,17 @@ p {
 .ws{
   cursor: default;
   margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+}
+.ws a{
+    margin-right: 13px;
+    cursor: pointer;
+}
+.ws svg{
+  color: red;
+  cursor: pointer;
+}
+.ws svg:hover{
+  scale: 1.3;
 }

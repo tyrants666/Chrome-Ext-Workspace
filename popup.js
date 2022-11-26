@@ -29,6 +29,8 @@ class workspaceClass {
       workspaces[wsId].windowId = workspaces[wsId].urls[0].windowId;
 
       localStorage_set()
+      this.workspace_create_elem_(wsId, this.wsName);
+      
       wsId++
     }
   }
@@ -38,30 +40,11 @@ class workspaceClass {
     const wsWrapper = document.querySelector('.workspaces');
     const wsTemplate = document.querySelector('#ws_template');
     const ws = wsTemplate.content.firstElementChild.cloneNode(true)
-    ws.setAttribute('data-window-id', ws_id);
+    ws.setAttribute('data-ws-id', ws_id);
     ws.querySelector('.ws-name').textContent = ws_name;
     wsWrapper.prepend(ws)
-    this.workspace_onclick();
   }
 
-  //Workspace onclick ---------------------------------------------
-  workspace_onclick(){
-    let all_ws = document.querySelectorAll('.ws')
-    for (const ws of all_ws) {
-      ws.onclick = e => {
-
-        //Create Tabs ---------
-        let window_id = ws.getAttribute('data-window-id');
-        let storedUrls = wsItem[window_id]['urls'];
-        for (const i of Object.keys(storedUrls)) {
-          chrome.tabs.create({ 
-            url: storedUrls[i]['url'] ,
-            active: false
-          });
-        }
-      }
-    }
-  }
 }
 // END CLASS WOKSPACE -----------------------------------------------------------------
 // END CLASS WOKSPACE -----------------------------------------------------------------
@@ -102,9 +85,6 @@ document.querySelector("ul").append(...elements);
 
 
 
-
-
-
 //Add Group Onclick --------------------------------------
 const button = document.querySelector("button");
 button.addEventListener("click", async () => {
@@ -121,11 +101,42 @@ button.addEventListener("click", async () => {
 
 });
 
+
+
+  //Workspace onclick ---------------------------------------------
+  let all_ws = document.querySelectorAll('.ws')
+  for (const ws of all_ws) {
+    ws.querySelector('a').onclick = e => {
+      
+      //Create Tabs ---------
+      let ws_id = ws.getAttribute('data-ws-id');
+      let storedUrls = wsItem[ws_id]['urls'];
+      for (const i of Object.keys(storedUrls)) {
+        chrome.tabs.create({ 
+          url: storedUrls[i]['url'] ,
+          active: false
+        });
+      }
+    }
+  }
+
+  //Workspace remove -----------------------------------------------
+  let all_remove = document.querySelectorAll('svg.ws-remove');
+  for (const remove of all_remove) {
+    remove.onclick = e => {
+      let ws_id = remove.parentElement.getAttribute('data-ws-id');
+      delete workspaces[ws_id]
+      localStorage_set()
+      remove.parentElement.remove();
+    }
+  }
+
+
+
 //Local Storage Functions----------------------------------------------
 //Local Storage Functions----------------------------------------------
 function localStorage_set() {
     localStorage.setItem('workspaces', JSON.stringify(workspaces));
-    wsObj.workspace_create_elem_(wsId, wsObj.wsName);
 }
 
 function localStorage_get(trigger) {
@@ -143,44 +154,3 @@ function localStorage_get(trigger) {
   }
   workspaces = wsItem;
 }
-
-
-
-
-
-
-
-// workspaces = {
-//   4424: {
-//     workspace_name: "HP Tester",
-//     workspace_color: "Red",
-//     urls:{
-//       0:{
-//         icon:"",
-//         name:"demo9",
-//         url:"https://demo9.staging.com/"
-//       },
-//       1:{
-//         icon:"",
-//         name:"demo9",
-//         url:"https://demo9.staging.com/"
-//       }
-//     }
-//   },
-//   4424: {
-//     workspace_name: "HP Tester",
-//     workspace_color: "Red",
-//     urls:{
-//       0:{
-//         icon:"",
-//         name:"demo9",
-//         url:"https://demo9.staging.com/"
-//       },
-//       1:{
-//         icon:"",
-//         name:"demo9",
-//         url:"https://demo9.staging.com/"
-//       }
-//     }
-//   },
-// }
