@@ -158,8 +158,8 @@ form button {
   font-weight: 500;
 }
 .ws svg {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1.125rem;
+  height: 1.125rem;
   color: red;
   cursor: pointer;
 }
