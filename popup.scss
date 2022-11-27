@@ -170,6 +170,8 @@ form{
   }
 
   svg{
+    width: 20*$rem;
+    height: 20*$rem;
     color: red;
     cursor: pointer;
     &:hover{
