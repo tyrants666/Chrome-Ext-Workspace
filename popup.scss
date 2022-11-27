@@ -123,6 +123,10 @@ form{
   img{
     height: 35*$rem;
     cursor: pointer;
+    transition: .2s;
+    &:hover{
+      scale: 1.1;
+    }
   }
   button{
     width: 25%;

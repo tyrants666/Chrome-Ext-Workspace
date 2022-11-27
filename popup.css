@@ -112,6 +112,10 @@ form input {
 form img {
   height: 2.1875rem;
   cursor: pointer;
+  transition: 0.2s;
+}
+form img:hover {
+  scale: 1.1;
 }
 form button {
   width: 25%;
