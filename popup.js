@@ -85,9 +85,17 @@ document.querySelector("ul").append(...elements);
 
 
 
-//Add Group Onclick --------------------------------------
-const button = document.querySelector("button");
-button.addEventListener("click", async () => {
+//Add Group Onclick / Enter --------------------------------------
+const saveBtn = document.querySelector(".save");
+const wsInput = document.querySelector('#workspace-name');
+
+//Input on enter
+wsInput.onkeypress = e => {
+  if (e.key === "Enter"){ saveBtn.click(); }
+}
+
+//Input on click
+saveBtn.addEventListener("click", async () => {
 
   //Group Tabs
   const tabIds = tabs.map(({ id }) => id);
@@ -103,24 +111,24 @@ button.addEventListener("click", async () => {
 
 
 
-  //Workspace onclick ---------------------------------------------
-  let all_ws = document.querySelectorAll('.ws')
-  for (const ws of all_ws) {
-    ws.querySelector('a').onclick = e => {
-      
-      //Create Tabs ---------
-      let ws_id = ws.getAttribute('data-ws-id');
-      let storedUrls = wsItem[ws_id]['urls'];
-      for (const i of Object.keys(storedUrls)) {
-        chrome.tabs.create({ 
-          url: storedUrls[i]['url'] ,
-          active: false
-        });
-      }
+// Workspace onclick ---------------------------------------------
+let all_ws = document.querySelectorAll('.ws')
+for (const ws of all_ws) {
+  ws.querySelector('a').onclick = e => {
+    
+    //Create Tabs ---------
+    let ws_id = ws.getAttribute('data-ws-id');
+    let storedUrls = wsItem[ws_id]['urls'];
+    for (const i of Object.keys(storedUrls)) {
+      chrome.tabs.create({ 
+        url: storedUrls[i]['url'] ,
+        active: false
+      });
     }
   }
+}
 
-  //Workspace remove -----------------------------------------------
+  // Workspace remove -----------------------------------------------
   let all_remove = document.querySelectorAll('svg.ws-remove');
   for (const remove of all_remove) {
     remove.onclick = e => {
