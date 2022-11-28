@@ -8,6 +8,7 @@ $em: 0.0625em;
 @import url('https://fonts.googleapis.com/css2?family=Kulim+Park:wght@200;300;400;600;700&display=swap');
 
 :root {
+  --main: #ffd500;
   --prime-hue: 218;
   --primary: hsl(var(--prime-hue) 17% 35%);
   /* --primary: hsl(var(--prime-hue) 100% 0%); */
@@ -50,12 +51,12 @@ $em: 0.0625em;
   padding: 0;
   &::-moz-selection {
       /* Code for Firefox */
-      /* color: hsl(var(--prime-hue) 17% 35%); */
-      background: hsl(var(--prime-hue) 17% 35%);
+      /* color: hsl(var(--main) 17% 35%); */
+      background:var(--main) ;
   }
   &::selection {
-      /* color: hsl(var(--prime-hue) 17% 35%); */
-      background: hsl(var(--prime-hue) 17% 35%);
+      /* color: hsl(var(--main) 17% 35%); */
+      background: var(--main);
   }
 }
 
@@ -174,12 +175,14 @@ form{
   }
 
   svg{
-    width: 18*$rem;
-    height: 18*$rem;
-    color: red;
+    width: 19*$rem;
+    height: 19*$rem;
+    color: #f71629f0;
+    transition: .8s;
     cursor: pointer;
     &:hover{
       scale: 1.3;
+      transform: rotate(360deg);
     }
   }
 }
