@@ -105,7 +105,7 @@ let all_ws = document.querySelectorAll('.ws')
 for (const ws of all_ws) {
   ws.querySelector('a').onclick = async e => {
 
-    // Create Window
+    // Create Window -- with all urls
     let ws_id = ws.getAttribute('data-ws-id');
     let urlsArr = wsObj.workspace_tabs_get(ws_id)
     chrome.windows.create({
@@ -116,10 +116,10 @@ for (const ws of all_ws) {
     // Group Tabs
     // let urlsArr = wsObj.workspace_tabs_get(ws_id)
     // const wsName = 
-    wsObj.workspace_tabs_group(wsName);
-    const tabIds = tabs.map(({ id }) => id);
-    const group = await chrome.tabs.group({ tabIds });
-    await chrome.tabGroups.update(group, { title: "DOCS" });
+    // wsObj.workspace_tabs_group(wsName);
+    // const tabIds = tabs.map(({ id }) => id);
+    // const group = await chrome.tabs.group({ tabIds });
+    // await chrome.tabGroups.update(group, { title: "DOCS" });
   }
 }
 
