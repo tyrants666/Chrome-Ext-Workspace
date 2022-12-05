@@ -50,6 +50,7 @@
 
 html {
   font-size: 1rem;
+  background: var(--theme-core);
   scrollbar-width: thin;
   scrollbar-color: #ccc #fff !important;
   scroll-behavior: smooth;
@@ -63,6 +64,8 @@ body {
   background: var(--theme-core);
   font-family: var(--theme-font);
   padding: 1rem 1.5rem 1.5rem;
+  border: 9px solid var(--theme-core);
+  border-radius: 18px;
 }
 
 a {

@@ -114,6 +114,9 @@ for (const ws of all_ws) {
     });
     
     // Group Tabs
+    // let urlsArr = wsObj.workspace_tabs_get(ws_id)
+    // const wsName = 
+    wsObj.workspace_tabs_group(wsName);
     const tabIds = tabs.map(({ id }) => id);
     const group = await chrome.tabs.group({ tabIds });
     await chrome.tabGroups.update(group, { title: "DOCS" });
